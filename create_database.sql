@@ -97,3 +97,35 @@ CREATE TABLE suspicious_meetings (
 \COPY purchases FROM 'data/purchases.csv' CSV;
 \COPY suspicious_purchases FROM 'data/Suspicious_purchases.csv' CSV;
 \COPY other_suspicious_purchases FROM 'data/Other_suspicious_purchases.csv' CSV HEADER;
+
+ALTER TABLE calls
+    ALTER COLUMN created_at SET DATA TYPE timestamp without time zone
+    USING to_timestamp(created_at + 1431352800);
+
+ALTER TABLE suspicious_calls
+    ALTER COLUMN created_at SET DATA TYPE timestamp without time zone
+    USING to_timestamp(created_at + 1431352800);
+
+ALTER TABLE purchases
+    ALTER COLUMN created_at SET DATA TYPE timestamp without time zone
+    USING to_timestamp(created_at + 1431352800);
+
+ALTER TABLE suspicious_purchases
+    ALTER COLUMN created_at SET DATA TYPE timestamp without time zone
+    USING to_timestamp(created_at + 1431352800);
+
+ALTER TABLE other_suspicious_purchases
+    ALTER COLUMN created_at SET DATA TYPE timestamp without time zone
+    USING to_timestamp(created_at + 1431352800);
+
+ALTER TABLE emails
+    ALTER COLUMN created_at SET DATA TYPE timestamp without time zone
+    USING to_timestamp(created_at + 1431352800);
+
+ALTER TABLE meetings
+    ALTER COLUMN created_at SET DATA TYPE timestamp without time zone
+    USING to_timestamp(created_at + 1431352800);
+
+ALTER TABLE suspicious_meetings
+    ALTER COLUMN created_at SET DATA TYPE timestamp without time zone
+    USING to_timestamp(created_at + 1431352800);
