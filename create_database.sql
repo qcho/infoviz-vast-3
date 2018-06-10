@@ -96,4 +96,4 @@ CREATE TABLE suspicious_meetings (
 \COPY suspicious_meetings FROM 'data/Suspicious_meetings.csv' CSV;
 \COPY purchases FROM 'data/purchases.csv' CSV;
 \COPY suspicious_purchases FROM 'data/Suspicious_purchases.csv' CSV;
-\COPY other_suspicious_purchases FROM 'data/Other_suspicious_purchases.csv' CSV;
+\COPY other_suspicious_purchases FROM 'data/Other_suspicious_purchases.csv' CSV HEADER;
