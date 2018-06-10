@@ -4,7 +4,7 @@ DROP USER IF EXISTS infoviz;
 CREATE USER infoviz WITH PASSWORD 'infoviz' CREATEDB;
 CREATE DATABASE vast3 OWNER infoviz;
 
-\c vas3 infoviz;
+\c vast3 infoviz;
 
 CREATE TABLE company_index (
     name VARCHAR,
