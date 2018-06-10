@@ -1,8 +1,10 @@
 DROP DATABASE IF EXISTS vast3;
+DROP DATABASE IF EXISTS metabase;
 DROP USER IF EXISTS infoviz;
 
 CREATE USER infoviz WITH PASSWORD 'infoviz' CREATEDB;
 CREATE DATABASE vast3 OWNER infoviz;
+CREATE DATABASE metabase OWNER infoviz;
 
 \c vast3 infoviz;
 
