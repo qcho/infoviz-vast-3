@@ -5,7 +5,6 @@ CREATE USER infoviz WITH PASSWORD 'infoviz' CREATEDB;
 CREATE DATABASE vast3 OWNER infoviz;
 
 \c vas3 infoviz;
-SET ROLE 'infoviz';
 
 CREATE TABLE company_index (
     name VARCHAR,
