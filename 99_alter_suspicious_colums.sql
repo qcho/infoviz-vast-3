@@ -1,3 +1,5 @@
+\c vast3 infoviz;
+
 -- Calls
 ALTER TABLE calls
     ADD COLUMN suspicious boolean NOT NULL DEFAULT false;

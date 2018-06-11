@@ -2,6 +2,8 @@
 -- Magic 1431352800 from:
 -- SELECT extract(epoch from ('May 11, 2015 at 14:00 UTC' at time zone 'utc'));
 
+\c vast3 infoviz;
+
 ALTER TABLE calls
     ALTER COLUMN created_at SET DATA TYPE timestamp without time zone
     USING to_timestamp(created_at + 1431352800);

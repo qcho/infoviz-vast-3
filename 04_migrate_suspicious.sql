@@ -1,5 +1,7 @@
 -- Migrate suspicions
 
+\c vast3 infoviz;
+
 -- Flag suspected employees
 UPDATE company_index SET suspicious = true WHERE concat_ws(' ', name, surname) IN (
     'Alex Hall', 'Lizbeth Jindra', 'Patrick Lane', 'Richard Fox', 'Sara Ballard', 'May Burton',
