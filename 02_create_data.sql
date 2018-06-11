@@ -1,10 +1,6 @@
 DROP DATABASE IF EXISTS vast3;
-DROP DATABASE IF EXISTS metabase;
-DROP USER IF EXISTS infoviz;
 
-CREATE USER infoviz WITH PASSWORD 'infoviz' CREATEDB;
 CREATE DATABASE vast3 OWNER infoviz;
-CREATE DATABASE metabase OWNER infoviz;
 
 \c vast3 infoviz;
 
@@ -100,6 +96,10 @@ CREATE TABLE suspicious_meetings (
 \COPY suspicious_purchases FROM 'data/Suspicious_purchases.csv' CSV;
 \COPY other_suspicious_purchases FROM 'data/Other_suspicious_purchases.csv' CSV HEADER;
 
+-- Convert BigInteger to timestamp
+-- Magic 1431352800 from:
+-- SELECT extract(epoch from ('May 11, 2015 at 14:00 UTC' at time zone 'utc'));
+
 ALTER TABLE calls
     ALTER COLUMN created_at SET DATA TYPE timestamp without time zone
     USING to_timestamp(created_at + 1431352800);
@@ -121,6 +121,36 @@ ALTER TABLE other_suspicious_purchases
     USING to_timestamp(created_at + 1431352800);
 
 ALTER TABLE emails
+    ALTER COLUMN created_at SET DATA TYPE timestamp without time zone
+    USING to_timestamp(created_at + 1431352800);
+
+ALTER TABLE meetings
+    ALTER COLUMN created_at SET DATA TYPE timestamp without time zone
+    USING to_timestamp(created_at + 1431352800);
+
+ALTER TABLE suspicious_meetings
+    ALTER COLUMN created_at SET DATA TYPE timestamp without time zone
+    USING to_timestamp(created_at + 1431352800);
+
+-- Migrate suspicions
+
+ALTER TABLE calls
+    ALTER COLUMN created_at SET DATA TYPE timestamp without time zone
+    USING to_timestamp(created_at + 1431352800);
+
+DROP TABLE suspicious_calls;
+
+ALTER TABLE purchases
+    ALTER COLUMN created_at SET DATA TYPE timestamp without time zone
+    USING to_timestamp(created_at + 1431352800);
+
+DROP TABLE suspicious_purchases;
+
+ALTER TABLE other_suspicious_purchases
+    ALTER COLUMN created_at SET DATA TYPE timestamp without time zone
+    USING to_timestamp(created_at + 1431352800);
+
+DROP TABLE emails
     ALTER COLUMN created_at SET DATA TYPE timestamp without time zone
     USING to_timestamp(created_at + 1431352800);
 
