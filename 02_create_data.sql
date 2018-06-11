@@ -35,13 +35,6 @@ CREATE TABLE calls (
 
 CREATE INDEX ON calls(suspicious);
 
-CREATE TABLE suspicious_calls (
-    source_id int NOT NULL REFERENCES company_index(employer_id),
-    etype_id int NOT NULL REFERENCES etype(id),
-    target_id int NOT NULL REFERENCES company_index(employer_id),
-    created_at bigint NOT NULL
-);
-
 CREATE TABLE purchases (
     source_id int NOT NULL REFERENCES company_index(employer_id),
     etype_id int NOT NULL REFERENCES etype(id),
@@ -52,7 +45,34 @@ CREATE TABLE purchases (
 
 CREATE INDEX ON purchases(suspicious);
 
+CREATE TABLE emails (
+    source_id int NOT NULL REFERENCES company_index(employer_id),
+    etype_id int NOT NULL REFERENCES etype(id),
+    target_id int NOT NULL REFERENCES company_index(employer_id),
+    suspicious boolean NOT NULL DEFAULT false,
+    created_at bigint NOT NULL
+);
+
+CREATE INDEX ON emails(suspicious);
+
+CREATE TABLE meetings (
+    source_id int NOT NULL REFERENCES company_index(employer_id),
+    etype_id int NOT NULL REFERENCES etype(id),
+    target_id int NOT NULL REFERENCES company_index(employer_id),
+    suspicious boolean NOT NULL DEFAULT false,
+    created_at bigint NOT NULL
+);
+
+CREATE INDEX ON meetings(suspicious);
+
 CREATE TABLE suspicious_purchases (
+    source_id int NOT NULL REFERENCES company_index(employer_id),
+    etype_id int NOT NULL REFERENCES etype(id),
+    target_id int NOT NULL REFERENCES company_index(employer_id),
+    created_at bigint NOT NULL
+);
+
+CREATE TABLE suspicious_calls (
     source_id int NOT NULL REFERENCES company_index(employer_id),
     etype_id int NOT NULL REFERENCES etype(id),
     target_id int NOT NULL REFERENCES company_index(employer_id),
@@ -66,32 +86,12 @@ CREATE TABLE other_suspicious_purchases (
     created_at bigint NOT NULL
 );
 
-CREATE TABLE emails (
-    source_id int NOT NULL REFERENCES company_index(employer_id),
-    etype_id int NOT NULL REFERENCES etype(id),
-    target_id int NOT NULL REFERENCES company_index(employer_id),
-    suspicious boolean NOT NULL DEFAULT false,
-    created_at bigint NOT NULL
-);
-
-CREATE INDEX ON emails(suspicious);
-
 CREATE TABLE suspicious_emails (
     source_id int NOT NULL REFERENCES company_index(employer_id),
     etype_id int NOT NULL REFERENCES etype(id),
     target_id int NOT NULL REFERENCES company_index(employer_id),
     created_at bigint NOT NULL
 );
-
-CREATE TABLE meetings (
-    source_id int NOT NULL REFERENCES company_index(employer_id),
-    etype_id int NOT NULL REFERENCES etype(id),
-    target_id int NOT NULL REFERENCES company_index(employer_id),
-    suspicious boolean NOT NULL DEFAULT false,
-    created_at bigint NOT NULL
-);
-
-CREATE INDEX ON meetings(suspicious);
 
 CREATE TABLE suspicious_meetings (
     source_id int NOT NULL REFERENCES company_index(employer_id),
@@ -102,11 +102,12 @@ CREATE TABLE suspicious_meetings (
 
 \COPY company_index(name, surname, employer_id) FROM 'data/CompanyIndex.csv' CSV HEADER;
 \COPY calls(source_id, etype_id, target_id, created_at) FROM 'data/calls.csv' CSV;
-\COPY suspicious_calls FROM 'data/Suspicious_calls.csv' CSV;
 \COPY emails(source_id, etype_id, target_id, created_at) FROM 'data/emails.csv' CSV;
-\COPY suspicious_emails FROM 'data/Suspicious_emails.csv' CSV;
 \COPY meetings(source_id, etype_id, target_id, created_at) FROM 'data/meetings.csv' CSV;
-\COPY suspicious_meetings FROM 'data/Suspicious_meetings.csv' CSV;
 \COPY purchases(source_id, etype_id, target_id, created_at) FROM 'data/purchases.csv' CSV;
+
+\COPY suspicious_calls FROM 'data/Suspicious_calls.csv' CSV;
+\COPY suspicious_emails FROM 'data/Suspicious_emails.csv' CSV;
+\COPY suspicious_meetings FROM 'data/Suspicious_meetings.csv' CSV;
 \COPY suspicious_purchases FROM 'data/Suspicious_purchases.csv' CSV;
 \COPY other_suspicious_purchases FROM 'data/Other_suspicious_purchases.csv' CSV HEADER;
