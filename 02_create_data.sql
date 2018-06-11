@@ -146,33 +146,3 @@ ALTER TABLE meetings
 ALTER TABLE suspicious_meetings
     ALTER COLUMN created_at SET DATA TYPE timestamp without time zone
     USING to_timestamp(created_at + 1431352800);
-
--- Migrate suspicions
-
-ALTER TABLE calls
-    ALTER COLUMN created_at SET DATA TYPE timestamp without time zone
-    USING to_timestamp(created_at + 1431352800);
-
-DROP TABLE suspicious_calls;
-
-ALTER TABLE purchases
-    ALTER COLUMN created_at SET DATA TYPE timestamp without time zone
-    USING to_timestamp(created_at + 1431352800);
-
-DROP TABLE suspicious_purchases;
-
-ALTER TABLE other_suspicious_purchases
-    ALTER COLUMN created_at SET DATA TYPE timestamp without time zone
-    USING to_timestamp(created_at + 1431352800);
-
-DROP TABLE emails
-    ALTER COLUMN created_at SET DATA TYPE timestamp without time zone
-    USING to_timestamp(created_at + 1431352800);
-
-ALTER TABLE meetings
-    ALTER COLUMN created_at SET DATA TYPE timestamp without time zone
-    USING to_timestamp(created_at + 1431352800);
-
-ALTER TABLE suspicious_meetings
-    ALTER COLUMN created_at SET DATA TYPE timestamp without time zone
-    USING to_timestamp(created_at + 1431352800);
