@@ -99,6 +99,43 @@ CREATE MATERIALIZED VIEW communication_overview_suspicious_split AS
         source_id, target_id, created_at_week
 ;
 
+-- Active employees per month
+CREATE MATERIALIZED VIEW active_people_per_month AS
+WITH date_series AS (
+    SELECT generate_series(
+        date_trunc('month', min(begin_date)),
+        date_trunc('month', max(end_date)),
+        '1 month') as month
+    FROM employee_activity_range
+)
+SELECT
+    month,
+    SUM((
+        (date_trunc('month', begin_date), date_trunc('month', end_date) + interval '1 month') OVERLAPS (month, INTERVAL '1 month')
+    )::int) as active_users
+FROM
+    date_series,
+    employee_activity_range
+GROUP BY month
+ORDER BY month ASC
+;
 
---     WHERE  d1.source_id IN (SELECT employer_id FROM company_index WHERE suspicious = true)
---     AND d1.target_id IN (SELECT employer_id FROM company_index WHERE suspicious = true)
+-- Leaving employees per month
+CREATE MATERIALIZED VIEW leaving_people_per_month AS
+WITH date_series AS (
+    SELECT generate_series(
+        date_trunc('month', min(begin_date)),
+        date_trunc('month', max(end_date)),
+        '1 month') as month
+    FROM employee_activity_range
+)
+SELECT
+    month,
+    SUM((
+        (date_trunc('month', end_date), INTERVAL '1 day') OVERLAPS (month - interval '1 month', interval '1 month')
+    )::int) as active_users
+FROM
+    date_series,
+    employee_activity_range
+GROUP BY month
+;
