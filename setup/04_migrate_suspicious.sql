@@ -21,13 +21,14 @@ FROM suspicious_calls s
 DROP TABLE suspicious_calls;
 
 -- Purchases
-
+-- We commented out the created_at condition since there's only 1 suspicious purchase that matches both in
+-- source and target but doesn't match the date (it is a very close match)
 UPDATE purchases o SET suspicious = true
 FROM suspicious_purchases s
 	WHERE o.source_id = s.source_id
 	AND o.etype_id = s.etype_id
 	AND o.target_id = s.target_id
-	AND o.created_at = s.created_at;
+	-- AND o.created_at = s.created_at;
 
 DROP TABLE suspicious_purchases;
 
