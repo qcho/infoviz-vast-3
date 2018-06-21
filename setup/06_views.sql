@@ -19,9 +19,9 @@ CREATE MATERIALIZED VIEW employee_activity_range AS
 
 -- Communication count between employees (A->B and B->A are in SEPARATE rows)
 CREATE MATERIALIZED VIEW employee_communication_split AS
-    SELECT source_id, target_id, COUNT(1) as total
+    SELECT source_id, target_id, etype_id, COUNT(1) as total
     FROM all_records
-    GROUP BY source_id, target_id
+    GROUP BY source_id, target_id, etype_id
 ;
 
 -- Communication count between employees (A->B and B->A are MERGED)
