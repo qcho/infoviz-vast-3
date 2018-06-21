@@ -57,6 +57,48 @@ CREATE MATERIALIZED VIEW all_suspicious_records AS
     WHERE a.suspicious = true OR s.suspicious = true OR t.suspicious = true
 ;
 
+-- Communication count between employees per week (A->B and B->A are in SEPARATE rows)
+CREATE MATERIALIZED VIEW communication_overview_split AS
+    SELECT
+        source_id,
+        target_id,
+        date_trunc('week', created_at) AS created_at_week,
+        SUM((etype_id = 0 AND NOT suspicious)::int) as calls,
+        SUM((etype_id = 1 AND NOT suspicious)::int) as emails,
+        SUM((etype_id = 3 AND NOT suspicious)::int) as meetings,
+        SUM((etype_id = 2 AND NOT suspicious)::int) as purchases,
+        SUM((etype_id = 0 AND     suspicious)::int) as suspicious_calls,
+        SUM((etype_id = 1 AND     suspicious)::int) as suspicious_emails,
+        SUM((etype_id = 3 AND     suspicious)::int) as suspicious_meetings,
+        SUM((etype_id = 2 AND     suspicious)::int) as suspicious_purchases,
+        COUNT(*) AS total
+    FROM
+        all_records
+    GROUP BY
+        source_id, target_id, created_at_week
+;
+
+-- Communication count between employees per week (A->B and B->A are in SEPARATE rows)
+CREATE MATERIALIZED VIEW communication_overview_suspicious_split AS
+    SELECT
+        source_id,
+        target_id,
+        date_trunc('week', created_at) AS created_at_week,
+        SUM((etype_id = 0 AND NOT suspicious)::int) as calls,
+        SUM((etype_id = 1 AND NOT suspicious)::int) as emails,
+        SUM((etype_id = 3 AND NOT suspicious)::int) as meetings,
+        SUM((etype_id = 2 AND NOT suspicious)::int) as purchases,
+        SUM((etype_id = 0 AND     suspicious)::int) as suspicious_calls,
+        SUM((etype_id = 1 AND     suspicious)::int) as suspicious_emails,
+        SUM((etype_id = 3 AND     suspicious)::int) as suspicious_meetings,
+        SUM((etype_id = 2 AND     suspicious)::int) as suspicious_purchases,
+        COUNT(*) AS total
+    FROM
+        all_suspicious_records
+    GROUP BY
+        source_id, target_id, created_at_week
+;
+
 
 --     WHERE  d1.source_id IN (SELECT employer_id FROM company_index WHERE suspicious = true)
 --     AND d1.target_id IN (SELECT employer_id FROM company_index WHERE suspicious = true)
