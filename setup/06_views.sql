@@ -49,6 +49,13 @@ CREATE MATERIALIZED VIEW employee_communication_by_week AS
     GROUP BY s, t, e, w
 ;
 
+-- All suspicious records together
+CREATE MATERIALIZED VIEW all_suspicious_records AS
+    SELECT a.* FROM all_records AS a
+    JOIN company_index AS s ON s.employer_id = source_id
+    JOIN company_index AS t ON t.employer_id = target_id
+    WHERE a.suspicious = true OR s.suspicious = true OR t.suspicious = true
+;
 
 
 --     WHERE  d1.source_id IN (SELECT employer_id FROM company_index WHERE suspicious = true)
