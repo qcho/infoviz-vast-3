@@ -38,6 +38,17 @@ CREATE MATERIALIZED VIEW employee_communication_by_week_split AS
         source_id, target_id, etype_id, created_at_week
 ;
 
+-- Communication count between employees per week (A->B and B->A are MERGED)
+CREATE MATERIALIZED VIEW employee_communication_by_week AS
+    SELECT s as source_id, t as target_id, w as week, e as e_type, SUM(tt) as total FROM
+        (
+            SELECT source_id as s, target_id as t, etype_id as e, created_at_week as w, total FROM employee_communication_by_week_split WHERE source_id < target_id
+            UNION
+            SELECT target_id as s, source_id as t, etype_id as e, created_at_week as w, total FROM employee_communication_by_week_split WHERE source_id >= target_id
+        ) as tmp(s, t, e, w, tt)
+    GROUP BY s, t, e, w
+;
+
 
 
 --     WHERE  d1.source_id IN (SELECT employer_id FROM company_index WHERE suspicious = true)
