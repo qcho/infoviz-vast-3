@@ -9,9 +9,9 @@ CREATE VIEW all_records AS
 ;
 
 -- Employer creation
-CREATE MATERIALIZED VIEW employee_first_activity AS
+CREATE MATERIALIZED VIEW employee_activity_range AS
     SELECT DISTINCT
-        employer_id, min(created_at) as created_at
+        employer_id, min(created_at) as begin_date, max(created_at) as end_date
     FROM company_index
     JOIN all_records ON employer_id = all_records.source_id OR employer_id = all_records.target_id
     GROUP BY employer_id
