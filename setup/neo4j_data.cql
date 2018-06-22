@@ -31,6 +31,16 @@ MATCH (target:Person {ID: row[2]})
 MERGE (source)-[c:PURCHASES_FROM]->(target)
 ON CREATE SET c.created_at = datetime({epochSeconds: 1431352800 + toInteger(row[3])});
 
+MATCH(suspect:Person)
+WHERE suspect.name IN [
+    'Alex Hall', 'Lizbeth Jindra', 'Patrick Lane', 'Richard Fox', 'Sara Ballard', 'May Burton',
+    'Glen Grant', 'Dylan Ballard', 'Meryl Pastuch', 'Melita Scarpaci', 'Augusta Sharp',
+    'Kerstin Belveal', 'Rosalia Larroque', 'Lindsy Henion', 'Julie Tierno', 'Jose Ringwald',
+    'Ramiro Gault', 'Tobi Gatlin', 'Refugio Orrantia', 'Jenice Savaria'
+]
+SET suspect :Suspect
+RETURN suspect;
+
 USING PERIODIC COMMIT
 LOAD CSV FROM 'file:////data/purchases.csv' AS row
 MATCH (source:Person {ID: row[0]})
