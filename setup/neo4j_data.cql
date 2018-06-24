@@ -71,6 +71,7 @@ USING PERIODIC COMMIT
 LOAD CSV FROM 'file:///data/suspicious_all.csv' AS row
 MATCH (s:Person {ID: row[0]})-[c]->(t:Person {ID: row[2]})
 RETURN s, t, c
+// ---------------- Interesting queries ----------------
 
 LOAD CSV FROM 'file:////data/suspicious_calls.csv' AS row
 MATCH (source:Person {ID: row[0]})-[c]-(target:Person {ID: row[2]})
@@ -100,3 +101,10 @@ return s1,p,s2
 MATCH (s1:Suspect)-->(p:Person)<--(s2:Suspect)
 WHERE NOT s1 = s2
 return s1,p,s2
+
+MATCH (n:Suspect)<--(p:Person)-->(nn:Suspect) WHERE NOT (n) = (nn) RETURN n,p,nn
+
+MATCH x=(n:Suspect)--(p:Person)--(nn:Suspect) WHERE NOT (n) = (nn) RETURN x
+
+MATCH (n:Suspect)--(p:Person)--(nn:Suspect) WHERE NOT (n) = (nn) RETURN n,p,nn
+
