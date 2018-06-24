@@ -44,12 +44,33 @@ WHERE suspect.name IN suspects
 SET suspect :Suspect
 RETURN suspect;
 
+// ---------------- Flag suspicious interactions ----------------
+
 USING PERIODIC COMMIT
-LOAD CSV FROM 'file:///data/purchases.csv' AS row
-MATCH (source:Person {ID: row[0]})
-MATCH (target:Person {ID: row[2]})
-MERGE (source)-[c:PURCHASES_FROM]->(target)
-ON CREATE SET c.created_at = datetime({epochSeconds: 1431352800 + toInteger(row[3])});
+LOAD CSV FROM 'file:///data/Suspicious_calls.csv' AS row
+MATCH (s:Person {ID: row[0]})-[c:CALLS {created_at: datetime({epochSeconds: 1431352800 + toInteger(row[3])})}]->(t:Person {ID: row[2]})
+SET c += {suspicious: TRUE}
+
+USING PERIODIC COMMIT
+LOAD CSV FROM 'file:///data/Suspicious_emails.csv' AS row
+MATCH (s:Person {ID: row[0]})-[c:EMAILS {created_at: datetime({epochSeconds: 1431352800 + toInteger(row[3])})}]->(t:Person {ID: row[2]})
+SET c += {suspicious: TRUE}
+
+USING PERIODIC COMMIT
+LOAD CSV FROM 'file:///data/Suspicious_meetings.csv' AS row
+MATCH (s:Person {ID: row[0]})-[c:MEETS {created_at: datetime({epochSeconds: 1431352800 + toInteger(row[3])})}]->(t:Person {ID: row[2]})
+SET c += {suspicious: TRUE}
+
+// We don't match by create_at since there seems to be an error with the data and it isn't contained in the larger dataset
+USING PERIODIC COMMIT
+LOAD CSV FROM 'file:///data/Suspicious_purchases.csv' AS row
+MATCH (s:Person {ID: row[0]})-[c:PURCHASES_FROM]->(t:Person {ID: row[2]})
+SET c += {suspicious: TRUE}
+
+USING PERIODIC COMMIT
+LOAD CSV FROM 'file:///data/suspicious_all.csv' AS row
+MATCH (s:Person {ID: row[0]})-[c]->(t:Person {ID: row[2]})
+RETURN s, t, c
 
 LOAD CSV FROM 'file:////data/suspicious_calls.csv' AS row
 MATCH (source:Person {ID: row[0]})-[c]-(target:Person {ID: row[2]})
