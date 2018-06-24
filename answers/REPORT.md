@@ -22,6 +22,96 @@ Therefore we could assume that the Company is growing in number of people but ha
 
 ## Question 2
 
+After loading all of the information on a graph database, we decided to tag all of the suspicious people named based from the _Insider Letter_ with a `Suspicious` label so as to differenciate them from the rest.
+
+After tagging those people, we proceeded to see which people talked with at least two suspects:
+
+```
+MATCH (first:Suspect)<--(candidate:Person)-->(second:Suspect)
+WHERE NOT (first) = (second)
+RETURN *
+```
+
+With those relationships, we marked the suspects in red and applied a radial graph layout which resulted in the following pattern:
+
+![asd](images/ex2.svg)
+As we can see from the graph, there are two distinct communication partitions. The first partition (top) is composed completely of non-suspicious people and doesn't seem very interesting.
+The second partition is the one that interests us the most, since there are 6 people that seem to fall inside the suspicious category.
+First interesting person is _Timothy Gibson_. We can see that he has **a lot** of communication with the non-suspicious group and that he interacted with only two people from the suspicious group. Given his connection level to the top group, it would seem that he wasn't closely involved with the suspicious people.
+
+Second interesting data from this graph is the purchase made by Rosalia to Jenice. Upon exploring Jenice Savaria, we can see that she has only interacted with Rosalia and a purchase was involved.
+
+Third interesting group are the remaining 5: Martha Harris, Madeleine Nidorf, Sheilah Stachniw, Feme Hards and Sherrel Biebel.
+Pruning the above graph, we get a more clear view of this group:
+![asd](images/ex2_zoom.svg)
+
+We can see that each of these 5 people are closely related with the suspicious group having interaction with around a quarter of them. This could be an indicator that these 5 people have to be closely observed since they are possible suspects.
+
+Analysing each of these 25 suspects, we search the graph for any purchase that was done by them:
+
+```
+MATCH (s:Person)-[c:PURCHASES_FROM]->(p:Person)
+WHERE
+	(s.name = "Martha Harris"
+     OR s.name = "Madeline Nidorf"
+     OR s.name = "Sheilah Stachniw"
+     OR s.name = "Feme Hards"
+     OR s.name = "Sherrell Biebel")
+    OR s.suspicious = true
+RETURN s, p
+```
+
+We get the following:
+![Suspicious purchases](images/suspicious_purchases.svg)
+
+Giving us 6 purchases which we need to review from the following people:
+
+| From             | To             | When                 |
+| ---------------- | -------------- | -------------------- |
+| Rosalia Larroque | Jenice Savaria | 2017-09-20T03:38:53Z |
+| Lizbeth Jindra   | Gail Feindt    | 2017-03-10T21:11:00Z |
+| Sheilah Stachniw | Gail Feindt    | 2016-06-08T12:17:01Z |
+| Tobi Gatlin      | Gail Feindt    | 2015-10-12T05:56:52Z |
+| Meryl Pastuch    | Gail Feindt    | 2015-09-10T22:29:24Z |
+| Richard Fox      | Gail Feindt    | 2015-05-25T15:17:41Z |
+
+Reviewing the group's activity, we can see that it started forming around the 5th of November of 2015:
+
+```
+MATCH (s:Suspect)-[c]-(t:Suspect)
+WHERE c.created_at < datetime('2015-11-05')
+RETURN s, c, t
+```
+
+![](images/suspicious_2015_11_05.svg)
+
+And fast-forwarding in time, we can see that by the 1st of June of 2016 the group was nearly fully formed:
+
+![](images/suspicious_2016_06_01.svg)
+
+And already contains the suspects, leaving us with the following suspicious purchases:
+
+| From             | To             | When                 |
+| ---------------- | -------------- | -------------------- |
+| Rosalia Larroque | Jenice Savaria | 2017-09-20T03:38:53Z |
+| Lizbeth Jindra   | Gail Feindt    | 2017-03-10T21:11:00Z |
+| Sheilah Stachniw | Gail Feindt    | 2016-06-08T12:17:01Z |
+
 ## Question 3
 
+TODO
+
 ## Question 4
+
+TODO
+
+## Resources
+
+- [Neo4j graph database](https://neo4j.com/)
+  - Explore node relationships and patterns from processed data
+- [yWorks Neo4j explorer](https://www.yworks.com/neo4j-explorer/)
+  - Node layout and analysis
+- [PostgreSQL](https://www.postgresql.org/)
+  - Agreggation and analysis of source data
+- [Metabase](https://www.metabase.com/)
+  - Data visualization
