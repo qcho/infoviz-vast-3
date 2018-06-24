@@ -1,7 +1,9 @@
-// Create index
+// ---------------- Build database ----------------
 USING PERIODIC COMMIT
 LOAD CSV WITH HEADERS FROM 'file:///data/CompanyIndex.csv' AS row
 CREATE (:Person {ID: row.ID, name: (row.first + " " + row.last)});
+
+CREATE INDEX ON :Person(ID);
 
 USING PERIODIC COMMIT
 LOAD CSV FROM 'file:///data/calls.csv' AS row
