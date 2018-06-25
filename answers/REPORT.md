@@ -83,11 +83,11 @@ WHERE c.created_at < datetime('2015-11-05')
 RETURN s, c, t
 ```
 
-![](images/suspicious_2015_11_05.svg)
+![](images/3_suspicious_2015_11_05.svg)
 
 And fast-forwarding in time, we can see that by the 1st of June of 2016 the group was nearly fully formed:
 
-![](images/suspicious_2016_06_01.svg)
+![](images/3_suspicious_2016_06_01.svg)
 
 And already contains the suspects, leaving us with the following suspicious purchases:
 
@@ -99,7 +99,34 @@ And already contains the suspects, leaving us with the following suspicious purc
 
 ## Question 3
 
-TODO
+In the beginning, there was _Richard Fox_ (2015/11/05):
+
+![](images/3_suspicious_2015_11_05.svg)
+
+After fast-forwarding 10 days, we can see that the group of suspicious people start branching out:
+
+![](images/3_suspicious_2015_11_15.svg)
+
+There are a couple of separate clusters which show that though these people are suspicious _today_, they were not connected to the main group at that date.
+We can see also that _Richard Fox_ is a source of communication with various members of the group. No one still has communicated with him. Also, _Sherrell Bievel_ seems to be gaining importance between the group, since it appears as if many members start to communicate with her. One final interesting person in this cluster is _Madeline Nindorf_, since she is starting to look as a nexus between two clusters of suspicious people.
+
+When we look at the first semester of 2016:
+
+![](images/3_suspicious_2016_01_01_to_06_01.svg)
+
+There's a detached group, but in the main group, we can see that the most popular person in this period was Lindsey Henion.
+
+Looking at the period 2016/06/01 to 2016/12/31:
+
+![](images/3_suspicious_2016_06_01_to_2017_01_01.svg)
+
+We can see that there are two groups that interact with each other and end up reporting to _Glen Grant_, which could indicate that he could be a decision maker inside this group.
+
+During the first semester of 2017 nothing peculiar happened, but during the second semester, we get to the one and only suspicious purchase:
+
+![](images/3_suspicious_2017_06_01_to_2018_01_01.svg)
+
+During this last semester, we get to the suspicious purchase reported by the insider. We see that _Sherrell Biebel_, _Meryl Pastuch_ and _Richard Fox_ met together a few days before the _Meryl Pastuch_-_Rosalia Larroque_ meeting, which in turn was a few days before the purchase. This could indicate that the brain behind the purchase was the person that started everything: _Richard Fox_.
 
 ## Question 4
 
