@@ -1,3 +1,4 @@
+// This file uses aggregated information generated from Postgres to see only how many times people communicated with each other
 USING PERIODIC COMMIT
 LOAD CSV WITH HEADERS FROM 'file:///data/CompanyIndex.csv' AS row
 CREATE (:Person {ID: row.ID, name: (row.first + " " + row.last)});
@@ -20,6 +21,9 @@ WHERE suspect.name IN [
 ]
 SET suspect.suspicious = true;
 
+
+// These are some queries which are useful for tagging Interactions between people,
+// trying to identify communities and closeness
 CALL algo.pageRank('Person', 'INTERACTIONS', {write: true, writeProperty: 'pagerank'});
 CALL algo.labelPropagation('Person', 'INTERACTIONS', 'OUTGOING', {write: true, weightProperty: 'count', partitionProperty: 'community', iterations: 50})
 CALL algo.louvain('Person', 'INTERACTIONS', {write: true, writeProperty: 'community'});

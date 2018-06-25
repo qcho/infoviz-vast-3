@@ -1,4 +1,4 @@
-//C:/Users/Qcho/Documents/GitHub/infoviz-vast-3
+// Script to generate nodes for both people and events and link them together
 
 // Create People nodes
 USING PERIODIC COMMIT
@@ -59,7 +59,7 @@ MERGE (evnt)-[:TARGET]->(tgt);
 
 USING PERIODIC COMMIT 10000
 LOAD CSV FROM 'file:///data/Suspicious_calls.csv' AS row
-MATCH 
+MATCH
     (:Person {ID: row[0]})-[:SOURCE]->
     (evnt:Event:Call {created_at:datetime({epochSeconds: 1431352800 + toInteger(row[3])})})
     -[:TARGET]->(:Person {ID: row[2]})
@@ -67,7 +67,7 @@ SET evnt:Suspicious;
 
 USING PERIODIC COMMIT 10000
 LOAD CSV FROM 'file:///data/Suspicious_emails.csv' AS row
-MATCH 
+MATCH
     (:Person {ID: row[0]})-[:SOURCE]->
     (evnt:Event:Email {created_at:datetime({epochSeconds: 1431352800 + toInteger(row[3])})})
     -[:TARGET]->(:Person {ID: row[2]})
@@ -75,7 +75,7 @@ SET evnt:Suspicious;
 
 USING PERIODIC COMMIT 10000
 LOAD CSV FROM 'file:///data/Suspicious_meetings.csv' AS row
-MATCH 
+MATCH
     (:Person {ID: row[0]})-[:SOURCE]->
     (evnt:Event:Meeting {created_at:datetime({epochSeconds: 1431352800 + toInteger(row[3])})})
     -[:TARGET]->(:Person {ID: row[2]})
@@ -83,7 +83,7 @@ SET evnt:Suspicious;
 
 USING PERIODIC COMMIT 10000
 LOAD CSV FROM 'file:///data/Suspicious_purchases_fixed.csv' AS row
-MATCH 
+MATCH
     (:Person {ID: row[0]})-[:SOURCE]->
     (evnt:Event:Purchase {created_at:datetime({epochSeconds: 1431352800 + toInteger(row[3])})})
     -[:TARGET]->(:Person {ID: row[2]})
@@ -94,7 +94,7 @@ SET evnt:Suspicious;
 
 USING PERIODIC COMMIT 10000
 LOAD CSV WITH HEADERS FROM 'file:///data/Other_suspicious_purchases.csv' AS row
-MATCH 
+MATCH
     (:Person {ID: row.Source})-[:SOURCE]->
     (evnt:Event:Purchase {created_at:datetime({epochSeconds: 1431352800 + toInteger(row.Time)})})
     -[:TARGET]->(:Person {ID: row.Dest})

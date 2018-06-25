@@ -1,3 +1,5 @@
+-- Initializes the database structure
+
 DROP DATABASE IF EXISTS vast3;
 
 CREATE DATABASE vast3 OWNER infoviz;
@@ -18,7 +20,7 @@ CREATE TABLE etype (
     type VARCHAR(20)
 );
 
-INSERT INTO etype (id, type) VALUES 
+INSERT INTO etype (id, type) VALUES
     (0, 'call'),
     (1, 'email'),
     (2, 'purchases'),

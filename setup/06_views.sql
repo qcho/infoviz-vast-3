@@ -8,7 +8,8 @@ CREATE VIEW all_records AS
     SELECT * FROM meetings
 ;
 
--- Employer creation
+-- Employer first and last communcations
+-- Useful for knowing when an employee started and when it ended
 CREATE MATERIALIZED VIEW employee_activity_range AS
     SELECT DISTINCT
         employer_id, min(created_at) as begin_date, max(created_at) as end_date
@@ -18,6 +19,7 @@ CREATE MATERIALIZED VIEW employee_activity_range AS
 ;
 
 -- Communication count between employees (A->B and B->A are in SEPARATE rows)
+-- Tracks how much employer A talked to B across the whole timeline
 CREATE MATERIALIZED VIEW employee_communication_split AS
     SELECT source_id, target_id, etype_id, COUNT(1) as total
     FROM all_records
@@ -25,6 +27,7 @@ CREATE MATERIALIZED VIEW employee_communication_split AS
 ;
 
 -- Communication count between employees per week (A->B and B->A are in SEPARATE rows)
+-- Same as before but grouping by week
 CREATE MATERIALIZED VIEW employee_communication_by_week_split AS
     SELECT
         source_id,
@@ -39,6 +42,7 @@ CREATE MATERIALIZED VIEW employee_communication_by_week_split AS
 ;
 
 -- Communication count between employees per week (A->B and B->A are MERGED)
+-- Same as before, but we unify A talking to B and B talking to A in the same row
 CREATE MATERIALIZED VIEW employee_communication_by_week AS
     SELECT s as source_id, t as target_id, w as week, e as e_type, SUM(tt) as total FROM
         (
@@ -50,6 +54,8 @@ CREATE MATERIALIZED VIEW employee_communication_by_week AS
 ;
 
 -- All suspicious records together
+-- Gets all of the suspicious records, be it either because one of the members is suspicious or because the
+-- transaction is suspicious per-se
 CREATE MATERIALIZED VIEW all_suspicious_records AS
     SELECT a.* FROM all_records AS a
     JOIN company_index AS s ON s.employer_id = source_id
@@ -58,6 +64,7 @@ CREATE MATERIALIZED VIEW all_suspicious_records AS
 ;
 
 -- Communication count between employees per week (A->B and B->A are in SEPARATE rows)
+-- Separates every type of communication between two people and groups them by week
 CREATE MATERIALIZED VIEW communication_overview_split AS
     SELECT
         source_id,
@@ -79,6 +86,7 @@ CREATE MATERIALIZED VIEW communication_overview_split AS
 ;
 
 -- Communication count between employees per week (A->B and B->A are in SEPARATE rows)
+-- Same as before, but only for the suspicious records
 CREATE MATERIALIZED VIEW communication_overview_suspicious_split AS
     SELECT
         source_id,
@@ -100,6 +108,7 @@ CREATE MATERIALIZED VIEW communication_overview_suspicious_split AS
 ;
 
 -- Active employees per month
+-- Calculate how many active users were in a given month
 CREATE MATERIALIZED VIEW active_people_per_month AS
 WITH date_series AS (
     SELECT generate_series(
@@ -121,6 +130,7 @@ ORDER BY month ASC
 ;
 
 -- Leaving employees per month
+-- Same as before but for people who stopped being active
 CREATE MATERIALIZED VIEW leaving_people_per_month AS
 WITH date_series AS (
     SELECT generate_series(
