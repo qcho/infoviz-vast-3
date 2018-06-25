@@ -130,7 +130,33 @@ During this last semester, we get to the suspicious purchase reported by the ins
 
 ## Question 4
 
-TODO
+In this last question we found changing our graph from just Nodes of People with relations to all Nodes would give us the extra information about how the graph works in time.
+
+This is the result:
+![](images/4_known_suspects.svg)
+
+We did not find a similar pattern in the *OtherSuspect* purchases.
+
+When finding the initial structure 
+```
+MATCH (s:Suspicious:Purchase)--(x:Person)--(e:Event)--(y:Person) RETURN *
+```
+This was the result
+![](images/4_initial_suspects.svg)
+
+Performing the same in `OtherSuspicious` didn't work very well:
+![](images/4_othersuspicious_initial.png)
+
+So we did a more manual check:
+![](images/4_seeds.png)
+And then search only for Beth:
+![](images/4_Beth.svg)
+And Trevor:
+![](images/4_Trevor.svg)
+
+In these circular vizualizations we can see they had several events in common with some of it's contacts, and based on the structure of the known suspicious it's likely they are part of the suspicious net.
+
+One idea to tackle the massive amount of information issue is to prune *Popular* people and try to find relations without them, allowing us to perform more deep analisys into the relations.
 
 ## Resources
 
